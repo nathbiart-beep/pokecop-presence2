@@ -1,0 +1,25 @@
+name: Build Windows exe
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install pyinstaller -r requirements.txt
+
+      - run: pyinstaller --onefile --noconsole --name PokecopPresence pokecop_presence.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PokecopPresence
+          path: dist/PokecopPresence.exe
